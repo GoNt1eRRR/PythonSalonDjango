@@ -1,7 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 from beauty_salon.models import (
-    CustomUser, Salon, Procedure, SalonProcedure,
+    CustomUser, Salon, Procedure,
     Specialist, Availability, Booking
 )
 
@@ -21,20 +21,7 @@ class SalonSerializer(serializers.ModelSerializer):
 class ProcedureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Procedure
-        fields = ['id', 'name', 'description']
-
-
-class SalonProcedureSerializer(serializers.ModelSerializer):
-    salon = SalonSerializer(read_only=True)
-    procedure = ProcedureSerializer(read_only=True)
-    salon_id = serializers.PrimaryKeyRelatedField(
-        source='salon', queryset=Salon.objects.all(), write_only=True)
-    procedure_id = serializers.PrimaryKeyRelatedField(
-        source='procedure', queryset=Procedure.objects.all(), write_only=True)
-
-    class Meta:
-        model = SalonProcedure
-        fields = ['id', 'salon', 'procedure', 'price', 'salon_id', 'procedure_id']
+        fields = ['id', 'name', 'description', 'price']
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
@@ -112,9 +99,9 @@ class BookingSerializer(serializers.ModelSerializer):
 
         if not instance.price:
             try:
-                salon_proc = SalonProcedure.objects.get(salon=instance.salon, procedure=instance.procedure)
+                salon_proc = Procedure.objects.get(salon=instance.salon, procedure=instance.procedure)
                 instance.price = salon_proc.price
-            except SalonProcedure.DoesNotExist:
+            except Procedure.DoesNotExist:
                 instance.price = 0
             instance.save()
 

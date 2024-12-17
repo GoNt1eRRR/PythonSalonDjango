@@ -2,13 +2,13 @@
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from beauty_salon.models import (
-    CustomUser, Salon, Procedure, SalonProcedure,
+    CustomUser, Salon, Procedure,
     Specialist, Availability, Booking
 )
 from .serializers import (
     CustomUserSerializer, SalonSerializer, ProcedureSerializer,
-    SalonProcedureSerializer, SpecialistSerializer,
-    AvailabilitySerializer, BookingSerializer
+    SpecialistSerializer, AvailabilitySerializer,
+    BookingSerializer
 )
 
 class CustomUserViewSet(viewsets.ModelViewSet):
@@ -24,13 +24,6 @@ class SalonViewSet(viewsets.ModelViewSet):
 class ProcedureViewSet(viewsets.ModelViewSet):
     queryset = Procedure.objects.all()
     serializer_class = ProcedureSerializer
-
-
-class SalonProcedureViewSet(viewsets.ModelViewSet):
-    queryset = SalonProcedure.objects.all()
-    serializer_class = SalonProcedureSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['salon', 'procedure']
 
 
 class SpecialistViewSet(viewsets.ModelViewSet):
